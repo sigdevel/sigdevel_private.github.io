@@ -486,6 +486,7 @@
             text-decoration: none;
             transition: color 0.2s ease, transform 0.2s ease;
             white-space: nowrap;
+            will-change: transform;
         }
 
         .tag-cloud .tag:hover {
@@ -513,6 +514,26 @@
             font-size: 0.9rem;
             color: var(--muted-text);
             font-weight: 500;
+        }
+
+        .tag-cloud.is-interactive {
+            position: relative;
+            display: block;
+            height: clamp(280px, 35vw, 420px);
+            overflow: hidden;
+            padding: 12px;
+        }
+
+        .tag-cloud.is-interactive .tag {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: translate3d(var(--tag-x, 0), var(--tag-y, 0), 0);
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .tag-cloud.is-interactive .tag:hover {
+            transform: translate3d(var(--tag-x, 0), var(--tag-y, 0), 0) scale(1.08);
         }
 
         footer {
@@ -902,6 +923,123 @@
                 console.error('Could not copy text: ', err);
             });
         }
+
+        function initInteractiveTagCloud() {
+            const cloud = document.querySelector('.tag-cloud');
+            if (!cloud) {
+                return;
+            }
+
+            const tags = Array.from(cloud.querySelectorAll('.tag'));
+            if (!tags.length) {
+                return;
+            }
+
+            cloud.classList.add('is-interactive');
+
+            let width = 0;
+            let height = 0;
+            const padding = 12;
+            const maxSpeed = 0.35;
+            const repelRadius = 90;
+            const repelStrength = 0.35;
+            let pointer = { x: -9999, y: -9999 };
+
+            const tagStates = tags.map(tag => ({
+                el: tag,
+                x: 0,
+                y: 0,
+                vx: (Math.random() - 0.5) * maxSpeed,
+                vy: (Math.random() - 0.5) * maxSpeed,
+                w: 0,
+                h: 0
+            }));
+
+            const setBounds = () => {
+                const rect = cloud.getBoundingClientRect();
+                width = rect.width;
+                height = rect.height;
+            };
+
+            const placeTags = () => {
+                setBounds();
+                tagStates.forEach(state => {
+                    state.w = state.el.offsetWidth;
+                    state.h = state.el.offsetHeight;
+                    state.x = Math.random() * Math.max(1, width - state.w - padding * 2) + padding;
+                    state.y = Math.random() * Math.max(1, height - state.h - padding * 2) + padding;
+                    state.el.style.setProperty('--tag-x', `${state.x}px`);
+                    state.el.style.setProperty('--tag-y', `${state.y}px`);
+                });
+            };
+
+            const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+            const animate = () => {
+                tagStates.forEach(state => {
+                    const centerX = state.x + state.w / 2;
+                    const centerY = state.y + state.h / 2;
+                    const dx = centerX - pointer.x;
+                    const dy = centerY - pointer.y;
+                    const distance = Math.hypot(dx, dy);
+
+                    if (distance > 0 && distance < repelRadius) {
+                        const force = (1 - distance / repelRadius) * repelStrength;
+                        state.vx += (dx / distance) * force;
+                        state.vy += (dy / distance) * force;
+                    }
+
+                    state.x += state.vx;
+                    state.y += state.vy;
+
+                    const maxX = width - state.w - padding;
+                    const maxY = height - state.h - padding;
+
+                    if (state.x <= padding || state.x >= maxX) {
+                        state.vx *= -1;
+                        state.x = clamp(state.x, padding, maxX);
+                    }
+
+                    if (state.y <= padding || state.y >= maxY) {
+                        state.vy *= -1;
+                        state.y = clamp(state.y, padding, maxY);
+                    }
+
+                    state.vx = clamp(state.vx, -maxSpeed, maxSpeed);
+                    state.vy = clamp(state.vy, -maxSpeed, maxSpeed);
+
+                    state.el.style.setProperty('--tag-x', `${state.x}px`);
+                    state.el.style.setProperty('--tag-y', `${state.y}px`);
+                });
+
+                requestAnimationFrame(animate);
+            };
+
+            const updatePointer = (event) => {
+                const rect = cloud.getBoundingClientRect();
+                pointer = {
+                    x: event.clientX - rect.left,
+                    y: event.clientY - rect.top
+                };
+            };
+
+            const resetPointer = () => {
+                pointer = { x: -9999, y: -9999 };
+            };
+
+            cloud.addEventListener('pointermove', updatePointer);
+            cloud.addEventListener('pointerleave', resetPointer);
+            window.addEventListener('resize', () => {
+                placeTags();
+            });
+
+            placeTags();
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('load', () => {
+            initInteractiveTagCloud();
+        });
     </script>
 </body>
 </html>
