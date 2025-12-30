@@ -522,18 +522,25 @@
             height: clamp(280px, 35vw, 420px);
             overflow: hidden;
             padding: 12px;
+            cursor: grab;
         }
 
         .tag-cloud.is-interactive .tag {
             position: absolute;
-            left: 0;
-            top: 0;
-            transform: translate3d(var(--tag-x, 0), var(--tag-y, 0), 0);
-            transition: color 0.2s ease, transform 0.2s ease;
+            left: 50%;
+            top: 50%;
+            transform: translate3d(var(--tag-x, 0), var(--tag-y, 0), 0) scale(var(--tag-scale, 1));
+            opacity: var(--tag-opacity, 1);
+            transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+            transform-origin: center;
         }
 
         .tag-cloud.is-interactive .tag:hover {
-            transform: translate3d(var(--tag-x, 0), var(--tag-y, 0), 0) scale(1.08);
+            transform: translate3d(var(--tag-x, 0), var(--tag-y, 0), 0) scale(calc(var(--tag-scale, 1) * 1.08));
+        }
+
+        .tag-cloud.is-interactive.is-dragging {
+            cursor: grabbing;
         }
 
         footer {
@@ -939,101 +946,143 @@
 
             let width = 0;
             let height = 0;
-            const padding = 12;
-            const maxSpeed = 0.35;
-            const repelRadius = 90;
-            const repelStrength = 0.35;
-            let pointer = { x: -9999, y: -9999 };
+            let radius = 0;
+            const perspective = 480;
+            const autoRotate = { x: 0.0015, y: 0.0024 };
+            const dragSpeed = 0.005;
+            let isHovering = false;
+            let isDragging = false;
+            let lastPointer = null;
 
-            const tagStates = tags.map(tag => ({
-                el: tag,
-                x: 0,
-                y: 0,
-                vx: (Math.random() - 0.5) * maxSpeed,
-                vy: (Math.random() - 0.5) * maxSpeed,
-                w: 0,
-                h: 0
-            }));
+            const tagStates = tags.map((tag, index) => {
+                const count = tags.length;
+                const phi = Math.acos(1 - 2 * (index + 0.5) / count);
+                const theta = Math.PI * (1 + Math.sqrt(5)) * (index + 0.5);
+                return {
+                    el: tag,
+                    x: Math.cos(theta) * Math.sin(phi),
+                    y: Math.sin(theta) * Math.sin(phi),
+                    z: Math.cos(phi)
+                };
+            });
 
             const setBounds = () => {
                 const rect = cloud.getBoundingClientRect();
                 width = rect.width;
                 height = rect.height;
+                radius = Math.max(120, Math.min(width, height) / 2 - 24);
             };
 
-            const placeTags = () => {
-                setBounds();
+            const rotateY = (state, angle) => {
+                const cos = Math.cos(angle);
+                const sin = Math.sin(angle);
+                const x = state.x * cos + state.z * sin;
+                const z = -state.x * sin + state.z * cos;
+                state.x = x;
+                state.z = z;
+            };
+
+            const rotateX = (state, angle) => {
+                const cos = Math.cos(angle);
+                const sin = Math.sin(angle);
+                const y = state.y * cos - state.z * sin;
+                const z = state.y * sin + state.z * cos;
+                state.y = y;
+                state.z = z;
+            };
+
+            const render = () => {
+                const centerX = width / 2;
+                const centerY = height / 2;
+
                 tagStates.forEach(state => {
-                    state.w = state.el.offsetWidth;
-                    state.h = state.el.offsetHeight;
-                    state.x = Math.random() * Math.max(1, width - state.w - padding * 2) + padding;
-                    state.y = Math.random() * Math.max(1, height - state.h - padding * 2) + padding;
-                    state.el.style.setProperty('--tag-x', `${state.x}px`);
-                    state.el.style.setProperty('--tag-y', `${state.y}px`);
-                });
-            };
+                    const depth = perspective / (perspective - state.z * radius);
+                    const x = state.x * radius * depth;
+                    const y = state.y * radius * depth;
+                    const opacity = Math.min(1, Math.max(0.35, (depth - 0.5) / 1.5));
 
-            const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+                    state.el.style.setProperty('--tag-x', `${x}px`);
+                    state.el.style.setProperty('--tag-y', `${y}px`);
+                    state.el.style.setProperty('--tag-scale', depth.toFixed(3));
+                    state.el.style.setProperty('--tag-opacity', opacity.toFixed(3));
+                    state.el.style.zIndex = Math.round(depth * 100);
+                });
+
+                cloud.style.setProperty('--center-x', `${centerX}px`);
+                cloud.style.setProperty('--center-y', `${centerY}px`);
+            };
 
             const animate = () => {
-                tagStates.forEach(state => {
-                    const centerX = state.x + state.w / 2;
-                    const centerY = state.y + state.h / 2;
-                    const dx = centerX - pointer.x;
-                    const dy = centerY - pointer.y;
-                    const distance = Math.hypot(dx, dy);
+                if (!isHovering && !isDragging) {
+                    tagStates.forEach(state => {
+                        rotateY(state, autoRotate.y);
+                        rotateX(state, autoRotate.x);
+                    });
+                }
 
-                    if (distance > 0 && distance < repelRadius) {
-                        const force = (1 - distance / repelRadius) * repelStrength;
-                        state.vx += (dx / distance) * force;
-                        state.vy += (dy / distance) * force;
-                    }
-
-                    state.x += state.vx;
-                    state.y += state.vy;
-
-                    const maxX = width - state.w - padding;
-                    const maxY = height - state.h - padding;
-
-                    if (state.x <= padding || state.x >= maxX) {
-                        state.vx *= -1;
-                        state.x = clamp(state.x, padding, maxX);
-                    }
-
-                    if (state.y <= padding || state.y >= maxY) {
-                        state.vy *= -1;
-                        state.y = clamp(state.y, padding, maxY);
-                    }
-
-                    state.vx = clamp(state.vx, -maxSpeed, maxSpeed);
-                    state.vy = clamp(state.vy, -maxSpeed, maxSpeed);
-
-                    state.el.style.setProperty('--tag-x', `${state.x}px`);
-                    state.el.style.setProperty('--tag-y', `${state.y}px`);
-                });
-
+                render();
                 requestAnimationFrame(animate);
             };
 
-            const updatePointer = (event) => {
-                const rect = cloud.getBoundingClientRect();
-                pointer = {
-                    x: event.clientX - rect.left,
-                    y: event.clientY - rect.top
-                };
+            const onPointerEnter = () => {
+                isHovering = true;
             };
 
-            const resetPointer = () => {
-                pointer = { x: -9999, y: -9999 };
+            const onPointerLeave = () => {
+                isHovering = false;
+                isDragging = false;
+                lastPointer = null;
+                cloud.classList.remove('is-dragging');
             };
 
-            cloud.addEventListener('pointermove', updatePointer);
-            cloud.addEventListener('pointerleave', resetPointer);
+            const onPointerDown = (event) => {
+                isDragging = true;
+                lastPointer = { x: event.clientX, y: event.clientY };
+                cloud.classList.add('is-dragging');
+                cloud.setPointerCapture(event.pointerId);
+            };
+
+            const onPointerMove = (event) => {
+                if (!isDragging || !lastPointer) {
+                    return;
+                }
+
+                const dx = event.clientX - lastPointer.x;
+                const dy = event.clientY - lastPointer.y;
+                lastPointer = { x: event.clientX, y: event.clientY };
+
+                const angleY = dx * dragSpeed;
+                const angleX = dy * dragSpeed;
+
+                tagStates.forEach(state => {
+                    rotateY(state, angleY);
+                    rotateX(state, angleX);
+                });
+
+                render();
+            };
+
+            const onPointerUp = (event) => {
+                isDragging = false;
+                lastPointer = null;
+                cloud.classList.remove('is-dragging');
+                cloud.releasePointerCapture(event.pointerId);
+            };
+
+            cloud.addEventListener('pointerenter', onPointerEnter);
+            cloud.addEventListener('pointerleave', onPointerLeave);
+            cloud.addEventListener('pointerdown', onPointerDown);
+            cloud.addEventListener('pointermove', onPointerMove);
+            cloud.addEventListener('pointerup', onPointerUp);
+            cloud.addEventListener('pointercancel', onPointerUp);
+
             window.addEventListener('resize', () => {
-                placeTags();
+                setBounds();
+                render();
             });
 
-            placeTags();
+            setBounds();
+            render();
             requestAnimationFrame(animate);
         }
 
