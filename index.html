@@ -21,6 +21,8 @@
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
             --font-serif: 'Source Serif 4', 'Iowan Old Style', 'Palatino', 'Times New Roman', serif;
             --font-sans: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            --content-width: 72ch;
+            --content-max: 960px;
         }
 
         * {
@@ -73,9 +75,9 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: var(--content-max);
             margin: 0 auto;
-            padding: 20px;
+            padding: 32px 24px 60px;
         }
 
         /* Language toggle button styles */
@@ -231,8 +233,8 @@
         section {
             background: var(--dark);
             border-radius: 10px;
-            padding: 30px;
-            margin: 30px 0;
+            padding: 32px 36px;
+            margin: 36px 0;
             box-shadow: var(--shadow);
             transform: translateY(20px);
             opacity: 0;
@@ -265,17 +267,27 @@
 
         h3 {
             color: var(--light-text);
-            margin: 15px 0 10px;
+            margin: 18px 0 12px;
         }
 
         p, li {
             color: var(--dark-text);
+            max-width: var(--content-width);
         }
 
         p {
-            margin-bottom: 1rem;
+            margin-bottom: 1.1rem;
             line-height: 1.8;
-            max-width: 70ch;
+        }
+
+        p + p {
+            margin-top: 0.75rem;
+        }
+
+        ul, ol {
+            margin: 0 0 1.1rem;
+            padding-left: 1.4rem;
+            max-width: var(--content-width);
         }
 
         a {
@@ -292,14 +304,14 @@
         .context-description {
             font-family: var(--font-sans);
             background-color: rgba(0,0,0,0.3);
-            padding: 15px;
+            padding: 16px 18px;
             border-radius: 5px;
             border-left: 3px solid var(--accent);
-            margin: 15px 0;
+            margin: 20px 0;
             color: #7fdbca;
             font-size: 0.95rem;
             line-height: 1.5;
-            max-width: 75ch;
+            max-width: var(--content-width);
         }
 
         .skills-grid {
@@ -341,8 +353,8 @@
         }
 
         .experience-item {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
+            margin-bottom: 32px;
+            padding-bottom: 22px;
             border-bottom: 1px dashed rgba(255,255,255,0.1);
         }
 
@@ -440,7 +452,7 @@
             margin-top: 10px;
             animation: pulse 2s infinite;
             font-size: 0.95rem;
-            max-width: 60ch;
+            max-width: var(--content-width);
             font-family: var(--font-sans);
         }
 
@@ -517,6 +529,15 @@
         @media (max-width: 768px) {
             .skills-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 24px 16px 48px;
+            }
+
+            section {
+                padding: 24px 20px;
+                margin: 28px 0;
             }
             
             .experience-header {
