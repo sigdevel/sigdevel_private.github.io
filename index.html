@@ -17,7 +17,8 @@
             --dark: #111;
             --darker: #000;
             --light-text: #ecf0f1;
-            --dark-text: #bdc3c7;
+            --dark-text: #cbd5e1;
+            --muted-text: #a9b4bf;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
             --font-serif: 'Source Serif 4', 'Iowan Old Style', 'Palatino', 'Times New Roman', serif;
             --font-sans: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
@@ -38,7 +39,7 @@
         body {
             background-color: var(--darker);
             color: var(--light-text);
-            line-height: 1.7;
+            line-height: 1.8;
             overflow-x: hidden;
             font-size: 1rem;
             font-family: var(--font-serif);
@@ -170,7 +171,7 @@
             margin: 0 auto 20px;
             max-width: 45ch;
             animation: fadeIn 1.5s ease;
-            color: var(--dark-text);
+            color: var(--muted-text);
         }
 
         .contact-info {
@@ -249,7 +250,7 @@
 
         h2 {
             color: var(--primary);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             position: relative;
             padding-bottom: 10px;
             letter-spacing: 0.01em;
@@ -267,21 +268,30 @@
 
         h3 {
             color: var(--light-text);
-            margin: 18px 0 12px;
+            margin: 22px 0 12px;
         }
 
         p, li {
             color: var(--dark-text);
             max-width: var(--content-width);
+            hyphens: auto;
+            overflow-wrap: break-word;
         }
 
         p {
-            margin-bottom: 1.1rem;
-            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            line-height: 1.85;
         }
 
         p + p {
             margin-top: 0.75rem;
+        }
+
+        p.lead {
+            color: var(--light-text);
+            font-size: 1.05rem;
+            font-family: var(--font-sans);
+            letter-spacing: 0.01em;
         }
 
         ul, ol {
@@ -300,7 +310,7 @@
         }
 
         li {
-            margin: 0.35rem 0;
+            margin: 0.45rem 0;
             padding-left: 0.15rem;
         }
 
@@ -353,9 +363,9 @@
             border-radius: 5px;
             border-left: 3px solid var(--accent);
             margin: 20px 0;
-            color: #7fdbca;
-            font-size: 0.95rem;
-            line-height: 1.5;
+            color: #a7f3df;
+            font-size: 0.97rem;
+            line-height: 1.6;
             max-width: var(--content-width);
         }
 
@@ -639,11 +649,11 @@
         <section id="about">
             <h2 class="lang-en">About</h2>
             <h2 class="lang-ru">About</h2>
-            <p class="lang-en">Security and certification specialist with experience on both sides of the table—formerly at a testing laboratory, now as an applicant.
+            <p class="lang-en lead">Security and certification specialist with experience on both sides of the table—formerly at a testing laboratory, now as an applicant.
 			On the side, I research video-format projects and contribute to/open-source security work (AFL++, Node.js, Python, Cppcheck, GPAC, JPEG XL).
 			Currently building structure-aware mutators, token dictionaries for dynamic testing, and no-code binary researching tools on LLMs based.
 			</p>
-            <p class="lang-ru">Участие в сертификации различных продуктов из реестра СЗИ ФСТЭК: в качестве сотрудника испытательной лаборатории (ранее); в качестве заявителя - сейчас.
+            <p class="lang-ru lead">Участие в сертификации различных продуктов из реестра СЗИ ФСТЭК: в качестве сотрудника испытательной лаборатории (ранее); в качестве заявителя - сейчас.
 Большой опыт проведения сертификаций по  "Методике  ВУиНДВ" с первой её редакции, в связи с чем, объем практик, с которыми сталкивался в работе, достаточно обширен.
 Факультативно: занимаюсь исследованием нескольких проектов, связанных с видео-форматами. В наличии так же опыт контрибьютинга и поиска уязвимостей в публичных проектах (AFL++, Nodejs, Python, Cppcheck, GPAC, JPEG XL). 
 На данный момент занимаюсь разработками structure-aware мутаторов и словарей токенов для фаззинга, а так же no-code инструментов бинарного анализа на основе LLM.
@@ -663,8 +673,8 @@
                 </div>
                 <h3 class="lang-en">Secure Development Specialist</h3>
                 <h3 class="lang-ru">Специалист обеспечения безопасной разработки</h3>
-                <p class="lang-en">Conducting comprehensive security assessments in accordance with FSTEC regulations</p>
-                <p class="lang-ru">Проведение комплексных оценок безопасности в соответствии с нормативами ФСТЭК</p>   
+                <p class="lang-en lead">Conducting comprehensive security assessments in accordance with FSTEC regulations</p>
+                <p class="lang-ru lead">Проведение комплексных оценок безопасности в соответствии с нормативами ФСТЭК</p>   
                 <div class="context-description lang-ru">
 				- первичный аудит безопасности ОО, перед передачей на исследования по ВУиНДВ,<br>
 				- обеспечение непрерывность работы группы по всем направлениям её деятельности;<br>
@@ -682,8 +692,8 @@
         <section id="contributions">
             <h2 class="lang-en">Open-source contributions</h2>
             <h2 class="lang-ru">Контрибьюция в open-source проекты</h2>
-            <p class="lang-en">Experience in contributing to opensource projects and opensource bug trackers for non-NDA projects</p>
-            <p class="lang-ru">Опыт контрибьютинга в opensource-проекты и баг-треккеры opensource для проектов не под NDA:</p>
+            <p class="lang-en lead">Experience in contributing to opensource projects and opensource bug trackers for non-NDA projects</p>
+            <p class="lang-ru lead">Опыт контрибьютинга в opensource-проекты и баг-треккеры opensource для проектов не под NDA:</p>
             <div class="badges">
 <div class="badge"><i class="fas fa-bug"></i>	<a href="https://bdu.fstec.ru/vul/2022-01054">BDU:2022-01054</a>	</div>
 <div class="badge"><i class="fas fa-bug"></i>	<a href="https://bdu.fstec.ru/vul/2023-00633">BDU:2023-00633</a>	</div>
