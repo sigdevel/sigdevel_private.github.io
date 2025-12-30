@@ -523,13 +523,15 @@
             overflow: hidden;
             padding: 12px;
             cursor: grab;
+            touch-action: none;
+            user-select: none;
         }
 
         .tag-cloud.is-interactive .tag {
             position: absolute;
             left: 50%;
             top: 50%;
-            transform: translate3d(var(--tag-x, 0), var(--tag-y, 0), 0) scale(var(--tag-scale, 1));
+            transform: translate3d(calc(-50% + var(--tag-x, 0)), calc(-50% + var(--tag-y, 0)), 0) scale(var(--tag-scale, 1));
             opacity: var(--tag-opacity, 1);
             transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
             transform-origin: center;
