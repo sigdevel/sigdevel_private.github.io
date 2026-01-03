@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alexander Shvedov | Главная</title>
+    <title>Alexander Shvedov | Reviews</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
@@ -41,15 +41,11 @@
             width: clamp(220px, 22vw, 280px);
             padding: 48px 32px;
             border-right: 1px solid var(--border);
-            background: transparent;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
         }
 
         .sidebar h1 {
             font-family: var(--font-sans);
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
         }
 
@@ -57,6 +53,7 @@
             font-size: 0.95rem;
             color: var(--muted);
             line-height: 1.6;
+            margin-top: 12px;
         }
 
         .nav {
@@ -66,14 +63,12 @@
             font-family: var(--font-sans);
             font-weight: 600;
             text-transform: lowercase;
+            margin-top: 24px;
         }
 
         .nav a {
             color: var(--accent);
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .nav a:hover {
@@ -86,7 +81,7 @@
         }
 
         .card {
-            max-width: 740px;
+            max-width: 760px;
             background: var(--surface);
             padding: clamp(28px, 4vw, 40px);
             border-radius: 18px;
@@ -95,7 +90,7 @@
 
         .card h2 {
             font-family: var(--font-sans);
-            font-size: clamp(2rem, 4vw, 2.6rem);
+            font-size: clamp(2rem, 4vw, 2.4rem);
             margin-bottom: 16px;
         }
 
@@ -103,7 +98,7 @@
             font-size: 1.05rem;
             line-height: 1.8;
             color: var(--muted);
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
 
         .card a {
@@ -134,25 +129,22 @@
 <body>
     <div class="layout">
         <aside class="sidebar">
-            <div>
-                <h1>Alexander Shvedov</h1>
-                <p>Security engineering, offensive research, and practical security reviews.</p>
-            </div>
+            <h1>Alexander Shvedov</h1>
+            <p>Обзоры на выявленные уязвимости и практический разбор кейсов.</p>
             <nav class="nav">
+                <a href="/">home</a>
                 <a href="/cv/">cv</a>
-                <a href="/reviews/">reviews</a>
             </nav>
         </aside>
         <main class="content">
             <section class="card">
-                <h2>Добро пожаловать.</h2>
+                <h2>Reviews</h2>
                 <p>
-                    Это основная страница персонального сайта. Здесь собраны ключевые ссылки
-                    на резюме и обзоры по выявленным уязвимостям.
+                    Здесь будут публиковаться обзоры на обнаруженные уязвимости,
+                    отчёты о проверках и краткие методические заметки.
                 </p>
                 <p>
-                    Начните с просмотра <a href="/cv/">резюме</a> или перейдите в
-                    <a href="/reviews/">раздел обзоров</a>.
+                    Для сотрудничества используйте контакты в <a href="/cv/">резюме</a>.
                 </p>
             </section>
         </main>
