@@ -2,18 +2,18 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <title>Виртуальный AppSec‑архитектор для ELF</title>
+  <title>Виртуальный AppSec-архитектор для ELF</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; connect-src 'self'">
   <meta name="description" content="Веб-инструмент для анализа защит ELF (NX, Canary, PIE, RELRO) с черновым планом атаки и усиления защиты. Обработка выполняется локально в браузере.">
   <link rel="canonical" href="https://sigdevel_private.github.io/tools/run.html">
-  <meta property="og:title" content="Виртуальный AppSec‑архитектор для ELF">
+  <meta property="og:title" content="Виртуальный AppSec-архитектор для ELF">
   <meta property="og:description" content="Веб-инструмент для анализа защит ELF (NX, Canary, PIE, RELRO) с черновым планом атаки и усиления защиты. Обработка выполняется локально в браузере.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sigdevel_private.github.io/tools/run.html">
   <meta property="og:image" content="https://sigdevel_private.github.io/assets/og-image.svg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Виртуальный AppSec‑архитектор для ELF">
+  <meta name="twitter:title" content="Виртуальный AppSec-архитектор для ELF">
   <meta name="twitter:description" content="Веб-инструмент для анализа защит ELF (NX, Canary, PIE, RELRO) с черновым планом атаки и усиления защиты. Обработка выполняется локально в браузере.">
   <meta name="twitter:image" content="https://sigdevel_private.github.io/assets/og-image.svg">
 
@@ -21,8 +21,8 @@
   <link rel="stylesheet" href="/assets/tools.css">
 </head>
 <body>
-  <h1 id="titleText">Виртуальный AppSec‑архитектор для ELF (Kaitai)</h1>
-  <p id="introText">Загрузи ELF‑файл, чтобы посмотреть canary, NX, PIE, RELRO и получить черновой план атаки/усиления защиты. Файл обрабатывается только в браузере.</p>
+  <h1 id="titleText">Виртуальный AppSec-архитектор для ELF (Kaitai)</h1>
+  <p id="introText">Загрузи ELF-файл, чтобы посмотреть canary, NX, PIE, RELRO и получить черновой план атаки/усиления защиты. Файл обрабатывается только в браузере.</p>
 
   <div class="controls">
     <label for="fileInput" id="fileLabel"></label>
@@ -40,7 +40,7 @@
     <div id="details" class="result"></div>
   </div>
 
-  <div id="footerNote">Для парсинга используется Kaitai Struct ELF JS‑библиотека (Elf.js + KaitaiStream.js).</div>
+  <div id="footerNote">Для парсинга используется Kaitai Struct ELF JS-библиотека (Elf.js + KaitaiStream.js).</div>
 
   <script src="KaitaiStream.js"></script>
   <script src="Elf.js"></script>
@@ -57,8 +57,8 @@ const MAX_SIZE = 50 * 1024 * 1024; // 50 МБ
 // ===== I18N =====
 const I18N = {
   ru: {
-    title: "Виртуальный AppSec‑архитектор для ELF (Kaitai)",
-    intro: "Загрузи ELF‑файл, чтобы посмотреть canary, NX, PIE, RELRO и получить черновой план атаки/усиления защиты. Файл обрабатывается только в браузере.",
+    title: "Виртуальный AppSec-архитектор для ELF (Kaitai)",
+    intro: "Загрузи ELF-файл, чтобы посмотреть canary, NX, PIE, RELRO и получить черновой план атаки/усиления защиты. Файл обрабатывается только в браузере.",
     analyze: "Анализировать",
     fileLabel: "Файл для анализа / File for analysis",
     fileLine: (name, size) => `Файл: ${name} (${size} байт)`,
@@ -67,7 +67,7 @@ const I18N = {
     labels: {
       risk: "Уровень риска",
       meta: (elfClass, elfType) => `Тип ELF: ${elfClass}, e_type: ${elfType}`,
-      footer: "Для парсинга используется Kaitai Struct ELF JS‑библиотека (Elf.js + KaitaiStream.js)."
+      footer: "Для парсинга используется Kaitai Struct ELF JS-библиотека (Elf.js + KaitaiStream.js)."
     },
     risk: { low: "Низкий", medium: "Средний", high: "Высокий" },
     errors: {
@@ -79,20 +79,20 @@ const I18N = {
     },
     plan: {
       noCanary: "Нет stack canary: возможен классический stack overflow с ROP.",
-      hasCanary: "Stack canary включён: потребуется инфо‑утечка/другой примитив обхода.",
+      hasCanary: "Stack canary включён: потребуется инфо-утечка/другой примитив обхода.",
       nxOff: "NX отключён: можно исполнять shellcode в стеке/heap.",
       nxOn: "NX включён: ориентироваться на ret2libc/ROP.",
-      pieOff: "PIE отключён: база кода фиксирована, ROP‑цепочки стабильны.",
-      pieOn: "PIE включён: нужна инфо‑утечка или другие обходы ASLR.",
-      relroNone: "RELRO нет: потенциальен GOT‑overwrite.",
+      pieOff: "PIE отключён: база кода фиксирована, ROP-цепочки стабильны.",
+      pieOn: "PIE включён: нужна инфо-утечка или другие обходы ASLR.",
+      relroNone: "RELRO нет: потенциальен GOT-overwrite.",
       relroPartial: "Partial RELRO: часть GOT защищена, проверьте динамические записи.",
       relroFull: "Full RELRO: ищите иные примитивы (heap, vtable, function pointers).",
-      comboNoCanaryNxPie: "Нет canary, но NX+PIE: stack‑overflow + ROP с утечкой адресов.",
+      comboNoCanaryNxPie: "Нет canary, но NX+PIE: stack-overflow + ROP с утечкой адресов.",
       comboNoCanaryNoNx: "Нет canary и NX: классический BOF с shellcode либо ROP.",
       fullEnabled: "Все защиты включены: ищите сложные уязвимости (UAF, heap, типы указателей)."
     },
     hints: {
-      noCanary: "Нет stack canary: облегчается эксплуатация stack‑overflow с ROP.",
+      noCanary: "Нет stack canary: облегчается эксплуатация stack-overflow с ROP.",
       hasCanary: "Stack canary включён: BOF заметно сложнее.",
       nxOff: "NX отключён: возможен shellcode.",
       nxOn: "NX включён: используйте ret2libc/ROP.",
@@ -119,18 +119,18 @@ const I18N = {
     risk: { low: "Low", medium: "Medium", high: "High" },
     errors: {
       notSelected: "No file selected.",
-      tooBig: "File exceeds in‑browser analysis limit (max 50 MB).",
+      tooBig: "File exceeds in-browser analysis limit (max 50 MB).",
       notElf: "File doesn’t look like ELF (0x7f 'ELF' signature not found).",
       unknownClass: "Couldn’t detect ELF class (expected ELF32 or ELF64).",
-      parseError: "Failed to parse file (possibly corrupted or non‑standard ELF)."
+      parseError: "Failed to parse file (possibly corrupted or non-standard ELF)."
     },
     plan: {
       noCanary: "No stack canary: classic stack overflow with ROP is viable.",
-      hasCanary: "Stack canary enabled: need info‑leak/other bypass primitive.",
+      hasCanary: "Stack canary enabled: need info-leak/other bypass primitive.",
       nxOff: "NX disabled: shellcode execution in stack/heap is possible.",
       nxOn: "NX enabled: pivot to ret2libc/ROP.",
       pieOff: "PIE disabled: code base address is fixed; ROP chains are stable.",
-      pieOn: "PIE enabled: info‑leak or other ASLR bypass is required.",
+      pieOn: "PIE enabled: info-leak or other ASLR bypass is required.",
       relroNone: "No RELRO: GOT overwrite possible.",
       relroPartial: "Partial RELRO: some GOT entries protected; review dynamic entries.",
       relroFull: "Full RELRO: look for other primitives (heap, vtable, function pointers).",
@@ -139,7 +139,7 @@ const I18N = {
       fullEnabled: "All protections on: hunt for complex bugs (UAF, heap, type confusions)."
     },
     hints: {
-      noCanary: "No stack canary: stack‑overflow exploitation with ROP is easier.",
+      noCanary: "No stack canary: stack-overflow exploitation with ROP is easier.",
       hasCanary: "Stack canary enabled: BOF much harder.",
       nxOff: "NX disabled: shellcode possible.",
       nxOn: "NX enabled: use ret2libc/ROP.",
