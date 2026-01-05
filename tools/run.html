@@ -74,6 +74,11 @@
     input[type="file"] { font-size: 0.8rem; max-width: 100%; background: var(--input-bg); color: var(--input-fg); border: 1px solid var(--input-border); border-radius: 6px; padding: 4px 6px; }
     button { padding: 6px 10px; font-size: 0.85rem; border-radius: 6px; border: 1px solid var(--card-border); background: var(--accent); color: #fff; }
     button:active { transform: scale(0.98); }
+    button:focus-visible,
+    input[type="file"]:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
     #fileInfo { font-size: 0.75rem; color: var(--muted); margin-bottom: 8px; word-break: break-all; }
     .result { margin-top: 10px; padding: 10px; border: 1px solid var(--card-border); border-radius: 6px; background: var(--card-bg); color: var(--fg); }
     .result h2, .result h3 { margin: 0 0 6px; font-size: 0.95rem; }
@@ -92,17 +97,20 @@
   <p id="introText">Загрузи ELF‑файл, чтобы посмотреть canary, NX, PIE, RELRO и получить черновой план атаки/усиления защиты. Файл обрабатывается только в браузере.</p>
 
   <div class="controls">
+    <label for="fileInput" id="fileLabel"></label>
     <input type="file" id="fileInput" accept="*/*">
     <button id="analyzeBtn">Анализировать</button>
     <div class="lang-switch" style="margin-left:auto; display:flex; gap:6px; align-items:center;">
-      <button id="btnRU" type="button" title="Русский" style="background:transparent;color:var(--fg);border:1px solid var(--card-border);border-radius:6px;padding:6px 8px;">RU</button>
-      <button id="btnEN" type="button" title="English" style="background:transparent;color:var(--fg);border:1px solid var(--card-border);border-radius:6px;padding:6px 8px;">EN</button>
+      <button id="btnRU" type="button" title="Русский" aria-pressed="false" style="background:transparent;color:var(--fg);border:1px solid var(--card-border);border-radius:6px;padding:6px 8px;">RU</button>
+      <button id="btnEN" type="button" title="English" aria-pressed="false" style="background:transparent;color:var(--fg);border:1px solid var(--card-border);border-radius:6px;padding:6px 8px;">EN</button>
     </div>
   </div>
   <div id="fileInfo"></div>
 
-  <div id="summary" class="result"></div>
-  <div id="details" class="result"></div>
+  <div id="results" role="status" aria-live="polite">
+    <div id="summary" class="result"></div>
+    <div id="details" class="result"></div>
+  </div>
 
   <div id="footerNote">Для парсинга используется Kaitai Struct ELF JS‑библиотека (Elf.js + KaitaiStream.js).</div>
 
@@ -124,6 +132,7 @@ const I18N = {
     title: "Виртуальный AppSec‑архитектор для ELF (Kaitai)",
     intro: "Загрузи ELF‑файл, чтобы посмотреть canary, NX, PIE, RELRO и получить черновой план атаки/усиления защиты. Файл обрабатывается только в браузере.",
     analyze: "Анализировать",
+    fileLabel: "Файл для анализа / File for analysis",
     fileLine: (name, size) => `Файл: ${name} (${size} байт)`,
     headers: { summary: "Итог", protections: "Защиты", hints: "Комментарии", plan: "Что делать атакующему" },
     riskSummary: "Черновая оценка риска эксплуатации по наборам защит.",
@@ -170,6 +179,7 @@ const I18N = {
     title: "Virtual AppSec Architect for ELF (Kaitai)",
     intro: "Upload an ELF to inspect canary, NX, PIE, RELRO and get a draft attack/hardening plan. Processing happens entirely in your browser.",
     analyze: "Analyze",
+    fileLabel: "File for analysis / Файл для анализа",
     fileLine: (name, size) => `File: ${name} (${size} bytes)`,
     headers: { summary: "Summary", protections: "Protections", hints: "Notes", plan: "Attacker Playbook" },
     riskSummary: "Draft exploitation risk based on enabled protections.",
@@ -229,6 +239,7 @@ function applyLang() {
   document.getElementById('titleText').textContent = tr('title');
   document.getElementById('introText').textContent = tr('intro');
   document.getElementById('analyzeBtn').textContent = tr('analyze');
+  document.getElementById('fileLabel').textContent = tr('fileLabel');
   const footer = document.getElementById('footerNote');
   if (footer) footer.textContent = tr('labels.footer');
   // Toggle buttons visual state
@@ -237,6 +248,8 @@ function applyLang() {
   en.style.borderColor = currentLang === 'en' ? 'var(--accent)' : 'var(--card-border)';
   ru.style.color = currentLang === 'ru' ? 'var(--accent)' : 'var(--fg)';
   en.style.color = currentLang === 'en' ? 'var(--accent)' : 'var(--fg)';
+  ru.setAttribute('aria-pressed', currentLang === 'ru' ? 'true' : 'false');
+  en.setAttribute('aria-pressed', currentLang === 'en' ? 'true' : 'false');
   // Re-render if we have results
   if (lastState) {
     const { protections, elfClass, elfType, fileName, fileSize } = lastState;
