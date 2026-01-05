@@ -2,18 +2,18 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <title>Виртуальный AppSec-архитектор для ELF</title>
+  <title>Fast Security ELF parser</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; connect-src 'self'">
   <meta name="description" content="Веб-инструмент для анализа защит ELF (NX, Canary, PIE, RELRO) с черновым планом атаки и усиления защиты. Обработка выполняется локально в браузере.">
   <link rel="canonical" href="https://sigdevel_private.github.io/tools/run.html">
-  <meta property="og:title" content="Виртуальный AppSec-архитектор для ELF">
+  <meta property="og:title" content="Fast Security ELF parser">
   <meta property="og:description" content="Веб-инструмент для анализа защит ELF (NX, Canary, PIE, RELRO) с черновым планом атаки и усиления защиты. Обработка выполняется локально в браузере.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sigdevel_private.github.io/tools/run.html">
   <meta property="og:image" content="https://sigdevel_private.github.io/assets/og-image.svg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Виртуальный AppSec-архитектор для ELF">
+  <meta name="twitter:title" content="Fast Security ELF parser">
   <meta name="twitter:description" content="Веб-инструмент для анализа защит ELF (NX, Canary, PIE, RELRO) с черновым планом атаки и усиления защиты. Обработка выполняется локально в браузере.">
   <meta name="twitter:image" content="https://sigdevel_private.github.io/assets/og-image.svg">
 
@@ -21,13 +21,13 @@
   <link rel="stylesheet" href="/assets/tools.css">
 </head>
 <body>
-  <h1 id="titleText">Виртуальный AppSec-архитектор для ELF (Kaitai)</h1>
-  <p id="introText">Загрузи ELF-файл, чтобы посмотреть canary, NX, PIE, RELRO и получить черновой план атаки/усиления защиты. Файл обрабатывается только в браузере.</p>
+  <h1 id="titleText">Fast Security ELF parser (Kaitai)</h1>
+  <p id="introText">Download the ELF file to view canary, NX, PIE, RELRO and get a rough plan of attack/defense enhancement. The file is only processed in the browser.</p>
 
   <div class="controls">
     <label for="fileInput" id="fileLabel"></label>
     <input type="file" id="fileInput" accept="*/*">
-    <button id="analyzeBtn">Анализировать</button>
+    <button id="analyzeBtn">Analyse</button>
     <div class="lang-switch">
       <button id="btnRU" class="lang-switch__button" type="button" title="Русский" aria-pressed="false">RU</button>
       <button id="btnEN" class="lang-switch__button" type="button" title="English" aria-pressed="false">EN</button>
@@ -57,7 +57,7 @@ const MAX_SIZE = 50 * 1024 * 1024; // 50 МБ
 // ===== I18N =====
 const I18N = {
   ru: {
-    title: "Виртуальный AppSec-архитектор для ELF (Kaitai)",
+    title: "Fast Security ELF parser (Kaitai)",
     intro: "Загрузи ELF-файл, чтобы посмотреть canary, NX, PIE, RELRO и получить черновой план атаки/усиления защиты. Файл обрабатывается только в браузере.",
     analyze: "Анализировать",
     fileLabel: "Файл для анализа / File for analysis",
